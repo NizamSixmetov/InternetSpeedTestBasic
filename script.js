@@ -1,88 +1,77 @@
-// document.getElementById("startTest").addEventListener("click", async () => {
-//   const downloadSpeedElem = document.getElementById("downloadSpeed");
-//   const uploadSpeedElem = document.getElementById("uploadSpeed");
-
-//   // Byte sizes
-//   const fileSize = 5 * 1024 * 1024;
-
-//   // Download speed
-//   const downloadStartTime = performance.now();
-//   await fetch("./File/1"); // Условный большой файл
-//   const downloadEndTime = performance.now();
-//   const downloadDuration = (downloadEndTime - downloadStartTime) / 1000; // second
-//   const downloadSpeed = (fileSize / downloadDuration / (1024 * 1024)).toFixed(
-//     2
-//   ); // Mbps
-//   downloadSpeedElem.textContent = downloadSpeed;
-
-//   // Upload speed
-//   const uploadStartTime = performance.now();
-//   await fetch("./File/1", {
-//     method: "POST",
-//     body: new Uint8Array(fileSize), // Ekvivalent məlumatları yükleyirik fileSize
-//   });
-
-//   const uploadEndTime = performance.now();
-//   const uploadDuration = (uploadEndTime - uploadStartTime) / 1000; // в секундах
-//   const uploadSpeed = (fileSize / uploadDuration / (1024 * 1024)).toFixed(2); // Mbps
-//   uploadSpeedElem.textContent = uploadSpeed;
-// });
-
 document.getElementById("startTest").addEventListener("click", async () => {
+  const startButton = document.getElementById("startTest");
   const downloadSpeedElem = document.getElementById("downloadSpeed");
   const finalResultElem = document.getElementById("finalResult");
-  const progressBar = document.getElementById("progress");
-  const testDuration = 10 * 1000; // 10 секунд
-  const updateInterval = 500; // Обновление каждые 500 мс
-  const fileSize = 100 * 1024 * 1024; // Размер файла (100MB)
+  const resultsDiv = document.getElementById("results");
+  const restartButton = document.getElementById("restartTest");
+  const h1Element = document.getElementById("h1");
 
-  // Сброс состояния
-  downloadSpeedElem.textContent = "0";
-  finalResultElem.textContent = "";
-  progressBar.style.width = "0%";
+  const testDuration = 10 * 1000; // 10 секунд
+  const updateInterval = 50; // Обновление каждые 500 мс
+  const fileSize = 10 * 1024 * 1024; // Размер файла (100MB)
 
   let downloadedBytes = 0;
   let speedSamples = [];
   const startTime = performance.now();
 
-  // Загрузка файла чанками
-  const response = await fetch("./File/1");
+  // Скрываем кнопку и показываем результаты
+  startButton.style.opacity = "0";
+  resultsDiv.classList.remove("hidden");
+  setTimeout(() => {
+    resultsDiv.classList.add("visible");
+  }, 0);
+  h1Element.classList.add("hidden");
+  startButton.classList.add("hidden");
+
+  downloadSpeedElem.textContent = "0";
+  finalResultElem.textContent = "";
+
+  const response = await fetch("./File/1"); // 1 GB liq fayl ana ekrandadi SpeedFile (GitHub-a getmemek sebebi ile proyekde yoxdu)
   const reader = response.body.getReader();
 
-  const updateSpeed = (bytesDownloaded, elapsedTime) => {
-    const speedKB = (bytesDownloaded / elapsedTime).toFixed(2); // KB/s
+  const calculateSpeed = (bytes, time) => {
+    const speedKB = bytes / time;
     return speedKB >= 1024
-      ? `${(speedKB / 1024).toFixed(2)} MB/s` // Преобразуем в MB/s
-      : `${speedKB} KB/s`;
+      ? `${(speedKB / 1024).toFixed(0)} MB/s`
+      : `${speedKB.toFixed(0)} KB/s`;
   };
 
   const interval = setInterval(() => {
-    const elapsedTime = (performance.now() - startTime) / 1000; // Секунды
-    const progress = (elapsedTime / (testDuration / 1000)) * 100; // Прогресс в %
-    progressBar.style.width = `${progress}%`;
-
-    // Рассчитываем и выводим текущую скорость
-    const speed = updateSpeed(downloadedBytes, elapsedTime);
+    const elapsedTime = performance.now() - startTime; // Секунды
+    const speed = calculateSpeed(downloadedBytes, elapsedTime);
     downloadSpeedElem.textContent = speed;
 
-    // Сохраняем данные для среднего значения
     speedSamples.push(downloadedBytes / elapsedTime);
   }, updateInterval);
 
   while (true) {
     const { done, value } = await reader.read();
-    if (done || performance.now() - startTime >= testDuration) break;
+    if (done) break;
 
     downloadedBytes += value.length;
+
+    // Завершаем, если тест продолжался достаточно долго
+    if (performance.now() - startTime >= testDuration) {
+      reader.cancel();
+      break;
+    }
   }
 
   clearInterval(interval);
 
-  // Финальный расчет средней скорости
   const averageSpeedKB =
-    speedSamples.reduce((a, b) => a + b, 0) / speedSamples.length;
+    speedSamples.reduce((sum, speed) => sum + speed, 0) / speedSamples.length;
+
   finalResultElem.textContent =
     averageSpeedKB >= 1024
-      ? `Средняя скорость: ${(averageSpeedKB / 1024).toFixed(2)} MB/s`
-      : `Средняя скорость: ${averageSpeedKB.toFixed(2)} KB/s`;
+      ? `Ortalama sürət: ${(averageSpeedKB / 1024).toFixed(0)} MB/s`
+      : `Ortalama sürət: ${averageSpeedKB.toFixed(0)} KB/s`;
+
+  // Показать кнопку для перезапуска
+  restartButton.classList.remove("hidden");
+});
+
+document.getElementById("restartTest").addEventListener("click", () => {
+  // Перезагрузка страницы для начала нового теста
+  location.reload();
 });

@@ -7,18 +7,26 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
+    <header class="container">
+      <img id="Logo" src="./File/Logo.png" alt="Logo" />
+    </header>
     <div class="container">
-      <h1 id="h1">İnternet sürət testi</h1>
-      <button id="startTest" class="start-button">Yoxla</button>
-      <div id="results" class="results hidden">
-        <div class="speed-info">
-          <p>Cari sürət: <span id="downloadSpeed">0</span></p>
-        </div>
-        <div id="finalResult" class="final-result"></div>
-        <button id="restartTest" class="restart-button hidden">
-          Yenidən başlayın
-        </button>
+      <div class="speed-info">
+        <span id="downloadSpeed"></span>
       </div>
+      <button id="startTest" class="glowing-btn">
+        <span class="glowing-txt"
+          >B<span class="faulty-letter">A</span>ŞLAT</span
+        >
+      </button>
+      <div id="results" class="hidden">
+        <div id="finalResult" class="final-result"></div>
+      </div>
+      <button id="restartTest" class="hidden glowing-btn">
+        <span class="glowing-txt"
+          >Yenidən <span class="faulty-letter">başlat</span></span
+        >
+      </button>
     </div>
     <script src="./script.js"></script>
   </body>

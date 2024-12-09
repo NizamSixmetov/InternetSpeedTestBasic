@@ -4,29 +4,24 @@ document.getElementById("startTest").addEventListener("click", async () => {
   const finalResultElem = document.getElementById("finalResult");
   const resultsDiv = document.getElementById("results");
   const restartButton = document.getElementById("restartTest");
-  const h1Element = document.getElementById("h1");
 
-  const testDuration = 10 * 1000; // 10 секунд
-  const updateInterval = 50; // Обновление каждые 500 мс
-  const fileSize = 10 * 1024 * 1024; // Размер файла (100MB)
+  const testDuration = 10 * 1000;
+  const updateInterval = 50;
 
   let downloadedBytes = 0;
   let speedSamples = [];
   const startTime = performance.now();
 
-  // Скрываем кнопку и показываем результаты
+  // Qizledib gosermek
   startButton.style.opacity = "0";
   resultsDiv.classList.remove("hidden");
-  setTimeout(() => {
-    resultsDiv.classList.add("visible");
-  }, 0);
-  h1Element.classList.add("hidden");
+  resultsDiv.classList.add("visible");
   startButton.classList.add("hidden");
 
   downloadSpeedElem.textContent = "0";
   finalResultElem.textContent = "";
 
-  const response = await fetch("./File/1"); // 1 GB liq fayl ana ekrandadi SpeedFile (GitHub-a getmemek sebebi ile proyekde yoxdu)
+  const response = await fetch("./File/SpeedFile.mp3"); // 1 GB liq fayl ana ekrandadi SpeedFile (GitHub-a getmemek sebebi ile proyekde yoxdu)
   const reader = response.body.getReader();
 
   const calculateSpeed = (bytes, time) => {
@@ -37,7 +32,7 @@ document.getElementById("startTest").addEventListener("click", async () => {
   };
 
   const interval = setInterval(() => {
-    const elapsedTime = performance.now() - startTime; // Секунды
+    const elapsedTime = performance.now() - startTime;
     const speed = calculateSpeed(downloadedBytes, elapsedTime);
     downloadSpeedElem.textContent = speed;
 
@@ -50,7 +45,7 @@ document.getElementById("startTest").addEventListener("click", async () => {
 
     downloadedBytes += value.length;
 
-    // Завершаем, если тест продолжался достаточно долго
+    // Stop edirik test cox zaman aldisa
     if (performance.now() - startTime >= testDuration) {
       reader.cancel();
       break;
@@ -67,11 +62,11 @@ document.getElementById("startTest").addEventListener("click", async () => {
       ? `Ortalama sürət: ${(averageSpeedKB / 1024).toFixed(0)} MB/s`
       : `Ortalama sürət: ${averageSpeedKB.toFixed(0)} KB/s`;
 
-  // Показать кнопку для перезапуска
+  // Yeniden baslat Buttonu gostermek
   restartButton.classList.remove("hidden");
 });
 
 document.getElementById("restartTest").addEventListener("click", () => {
-  // Перезагрузка страницы для начала нового теста
+  // Sehifeni yeniley ve baslat button qelir
   location.reload();
 });

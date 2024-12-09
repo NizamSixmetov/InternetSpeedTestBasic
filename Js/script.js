@@ -18,7 +18,7 @@ document.getElementById("startTest").addEventListener("click", async () => {
   resultsDiv.classList.add("visible");
   startButton.classList.add("hidden");
 
-  downloadSpeedElem.textContent = "0";
+  downloadSpeedElem.textContent = "0 MB/s";
   finalResultElem.textContent = "";
 
   const response = await fetch("../File/1"); // 1 GB liq fayl ana ekrandadi SpeedFile (GitHub-a getmemek sebebi ile proyekde yoxdu)

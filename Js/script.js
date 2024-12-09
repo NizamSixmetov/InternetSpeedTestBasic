@@ -21,7 +21,7 @@ document.getElementById("startTest").addEventListener("click", async () => {
   downloadSpeedElem.textContent = "0";
   finalResultElem.textContent = "";
 
-  const response = await fetch("./File/SpeedFile.mp3"); // 1 GB liq fayl ana ekrandadi SpeedFile (GitHub-a getmemek sebebi ile proyekde yoxdu)
+  const response = await fetch("../File/1"); // 1 GB liq fayl ana ekrandadi SpeedFile (GitHub-a getmemek sebebi ile proyekde yoxdu)
   const reader = response.body.getReader();
 
   const calculateSpeed = (bytes, time) => {

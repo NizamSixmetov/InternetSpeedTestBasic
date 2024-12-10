@@ -91,14 +91,6 @@ document.getElementById("startTest").addEventListener("click", async () => {
 
   clearInterval(interval);
 
-  const averageSpeedKB =
-    speedSamples.reduce((sum, speed) => sum + speed, 0) / speedSamples.length;
-
-  finalResultElem.textContent =
-    averageSpeedKB >= 1024
-      ? `Средняя скорость: ${(averageSpeedKB / 1024).toFixed(0)} MB/s`
-      : `Средняя скорость: ${averageSpeedKB.toFixed(0)} KB/s`;
-
   // Обновляем Upload Speed
   const uploadSpeed = await measureUploadSpeed();
   uploadSpeedElem.textContent = `Upload Speed: ${uploadSpeed}`;

@@ -210,12 +210,6 @@ body {
     opacity: 1;
   }
 }
-/* 
-@media only screen and (max-width: 600px) {
-  .glowing-btn {
-    font-size: 1em;
-  }
-} */
 
 body {
   background-color: #000000;

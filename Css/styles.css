@@ -6,6 +6,64 @@
   padding: 0;
 }
 
+body {
+  background-color: #000000;
+  display: flex;
+  flex-direction: column;
+  gap: 0rem;
+}
+
+.speed-info {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.speed-info > span {
+  font-size: 100px;
+  color: white;
+}
+
+.hidden {
+  display: none;
+}
+
+header > #logo {
+  display: flex;
+  text-align: center;
+  width: 25%;
+  margin: 0 auto;
+  margin-top: -60px;
+}
+
+.container {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+#downloadSpeed {
+  color: var(--glow-color);
+}
+
+#ping,
+#uploadSpeed {
+  font-size: 20px;
+  color: #53cbd9;
+  text-align: center;
+  margin: 10px 0;
+}
+
+.center-all-element {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 0rem;
+}
+
 :root {
   --glow-color: hsl(186 100% 69%);
 }
@@ -13,12 +71,6 @@
 ::before,
 ::after {
   box-sizing: border-box;
-}
-
-body {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
 }
 
 .glowing-btn {
@@ -209,63 +261,4 @@ body {
   100% {
     opacity: 1;
   }
-}
-
-body {
-  background-color: #000000;
-}
-
-.bodyDiv {
-  display: flex;
-  justify-content: center;
-}
-
-.flex {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.speed-info {
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.speed-info > span {
-  font-size: 100px;
-  color: white;
-}
-
-.hidden {
-  display: none;
-}
-
-header > #Logo {
-  display: flex;
-  text-align: center;
-  width: 25%;
-  height: 25%;
-  margin: 0 auto;
-  margin-top: -60px;
-}
-
-.container {
-  max-width: 100%;
-  margin: 0 auto;
-}
-
-#downloadSpeed {
-  color: var(--glow-color);
-}
-
-#ping,
-#uploadSpeed {
-  font-size: 20px;
-  color: var(--glow-color);
-  text-align: center;
-  margin: 10px 0;
 }

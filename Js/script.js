@@ -59,7 +59,7 @@ document.getElementById("startTest").addEventListener("click", async () => {
   }, 1000);
 
   // 3. Измерение Download Speed
-  const response = await fetch("../File/SpeedFile.mp3");
+  const response = await fetch("../File/1");
   const reader = response.body.getReader();
 
   const calculateSpeed = (bytes, time) => {

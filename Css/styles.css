@@ -261,3 +261,11 @@ header > #Logo {
 #downloadSpeed {
   color: var(--glow-color);
 }
+
+#ping,
+#uploadSpeed {
+  font-size: 20px;
+  color: var(--glow-color);
+  text-align: center;
+  margin: 10px 0;
+}

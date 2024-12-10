@@ -5,6 +5,16 @@ document.getElementById("startTest").addEventListener("click", async () => {
   const resultsDiv = document.getElementById("results");
   const restartButton = document.getElementById("restartTest");
 
+  const pingElem = document.createElement("div");
+  pingElem.id = "ping";
+  pingElem.textContent = "Ping: 0 ms";
+  resultsDiv.insertBefore(pingElem, finalResultElem);
+
+  const uploadSpeedElem = document.createElement("div");
+  uploadSpeedElem.id = "uploadSpeed";
+  uploadSpeedElem.textContent = "Upload Speed: 0";
+  resultsDiv.insertBefore(uploadSpeedElem, finalResultElem);
+
   const testDuration = 10 * 1000;
   const updateInterval = 50;
 
@@ -12,7 +22,7 @@ document.getElementById("startTest").addEventListener("click", async () => {
   let speedSamples = [];
   const startTime = performance.now();
 
-  // Qizledib gosermek
+  // Показать элементы
   startButton.style.opacity = "0";
   resultsDiv.classList.remove("hidden");
   resultsDiv.classList.add("visible");
@@ -21,7 +31,35 @@ document.getElementById("startTest").addEventListener("click", async () => {
   downloadSpeedElem.textContent = "0 MB/s";
   finalResultElem.textContent = "";
 
-  const response = await fetch("../File/1"); // 1 GB liq fayl ana ekrandadi SpeedFile (GitHub-a getmemek sebebi ile proyekde yoxdu)
+  // 1. Измерение Ping
+  const measurePing = async () => {
+    const startPing = performance.now();
+    await fetch("https://www.google.com", { mode: "no-cors" });
+    const endPing = performance.now();
+    return Math.round(endPing - startPing);
+  };
+
+  // 2. Измерение Upload Speed
+  const measureUploadSpeed = async () => {
+    const data = new Uint8Array(1024 * 512); // 512 KB
+    const startUpload = performance.now();
+    await fetch("/upload", { method: "POST", body: data });
+    const endUpload = performance.now();
+    const duration = endUpload - startUpload;
+    const speedKB = data.length / duration; // KB/s
+    return speedKB >= 1024
+      ? `${(speedKB / 1024).toFixed(0)} MB/s`
+      : `${speedKB.toFixed(0)} KB/s`;
+  };
+
+  // Обновляем Ping и Unloaded Ping
+  setInterval(async () => {
+    const ping = await measurePing();
+    pingElem.textContent = `Ping: ${ping} ms`;
+  }, 1000);
+
+  // 3. Измерение Download Speed
+  const response = await fetch("../File/SpeedFile.mp3");
   const reader = response.body.getReader();
 
   const calculateSpeed = (bytes, time) => {
@@ -45,7 +83,6 @@ document.getElementById("startTest").addEventListener("click", async () => {
 
     downloadedBytes += value.length;
 
-    // Stop edirik test cox zaman aldisa
     if (performance.now() - startTime >= testDuration) {
       reader.cancel();
       break;
@@ -59,14 +96,16 @@ document.getElementById("startTest").addEventListener("click", async () => {
 
   finalResultElem.textContent =
     averageSpeedKB >= 1024
-      ? `Ortalama sürət: ${(averageSpeedKB / 1024).toFixed(0)} MB/s`
-      : `Ortalama sürət: ${averageSpeedKB.toFixed(0)} KB/s`;
+      ? `Средняя скорость: ${(averageSpeedKB / 1024).toFixed(0)} MB/s`
+      : `Средняя скорость: ${averageSpeedKB.toFixed(0)} KB/s`;
 
-  // Yeniden baslat Buttonu gostermek
+  // Обновляем Upload Speed
+  const uploadSpeed = await measureUploadSpeed();
+  uploadSpeedElem.textContent = `Upload Speed: ${uploadSpeed}`;
+
   restartButton.classList.remove("hidden");
 });
 
 document.getElementById("restartTest").addEventListener("click", () => {
-  // Sehifeni yeniley ve baslat button qelir
   location.reload();
 });
